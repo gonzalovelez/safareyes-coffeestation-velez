@@ -169,7 +169,6 @@ en el endpoint 10.
 ## Git y GitHub
 
 - Remoto `origin`: https://github.com/gonzalovelez/safareyes-coffeestation-velez
-  (pendiente confirmar si debe apuntar a `gvelezrincon-tech`, como decía la versión anterior).
 - Se trabaja y se hace push con la cuenta `gonzalovelez`.
 - Ramas: `main` (principal) y `development` (trabajo; se integra aquí antes de pasar a `main`).
 
