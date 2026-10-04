@@ -7,6 +7,8 @@ import lombok.Setter;
 
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 @Table(name = "cupones", schema = "coffestation")
@@ -17,28 +19,37 @@ public class Cupones {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id;
+    private Long id;
 
     @Column (name = "codigo")
-    private String Codigo;
+    private String codigo;
 
     @Column (name = "tipo")
-    private String Tipo;
+    private String tipo;
 
     @Column (name = "valor")
-    private BigDecimal Valor;
+    private BigDecimal valor;
 
     @Column(name = "fecha_inicio")
-    private LocalDateTime Fecha_inicio;
+    private LocalDateTime fechaInicio;
 
     @Column (name = "fecha_fin")
-    private LocalDateTime Fecha_fin;
+    private LocalDateTime fechaFin;
 
     @Column (name = "max_usos")
-    private Long Max_usos;
+    private Long maxUsos;
 
     @Column (name = "importe_minimo")
-    private BigDecimal Importe_minimo;
+    private BigDecimal importeMinimo;
+
+    // Lado con la FK (Cupones → Cliente)
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "cliente_id")
+    private Cliente cliente;
+
+    // Lado inverso (Cupones → sus usos en PedidoCupones)
+    @OneToMany(mappedBy = "cupon", fetch = FetchType.LAZY)
+    private Set<PedidoCupones> usos = new HashSet<>();
 
 
 }

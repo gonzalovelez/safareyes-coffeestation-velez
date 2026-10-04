@@ -14,16 +14,20 @@ public class Usuario {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private Long Id;
+    private Long id;
 
     @Column (name = "nombre")
-    private String Nombre;
+    private String nombre;
 
     @Column (name = "contraseña")
-    private String Contraseña;
+    private String contraseña;
 
     @Column (name = "rol")
-    private String Rol;
+    private String rol;
+
+    // Lado inverso (Usuario → Cliente)
+    @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
+    private Cliente cliente;
 
 
 }
