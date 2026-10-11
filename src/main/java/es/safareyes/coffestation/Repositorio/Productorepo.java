@@ -3,43 +3,41 @@ package es.safareyes.coffestation.Repositorio;
 import es.safareyes.coffestation.Modelo.Producto;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
-import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 
 public interface Productorepo extends JpaRepository<Producto, Long> {
 
-    //USANDO JPA INTERFACE (Q1)
+    // GET /api/v1/productos
+    // Carta paginada: productos activos cuyo nombre contiene un texto (?page=&size=&sort=)
+    Page<Producto> findByNombreContainingIgnoreCaseAndActivoTrue(String texto, Pageable pageable);
 
-    // Productos activos de una categoría
-    List<Producto> findByCategoria_IdAndActivoTrue(Long categoriaId);
+    // GET /api/v1/productos/{id}
+    // Detalle de un producto con sus alérgenos cargados
+    @EntityGraph(attributePaths = {"alergenos"})
+    Optional<Producto> findWithAlergenosById(Long id);
 
-    // Productos cuyo nombre contiene un texto, sin distinguir mayúsculas
-    List<Producto> findByNombreContainingIgnoreCase(String texto);
-
-    //PAGINACIÓN (Q6): la carta paginada con ?page=&size=&sort=
-    Page<Producto> findByActivoTrue(Pageable pageable);
-
-    //MODIFICACIÓN MASIVA (Q4): agotar o reponer todos los productos de una categoría
-    @Transactional
-    @Modifying(clearAutomatically = true)
-    @Query("update Producto p set p.disponible = :disponible where p.categoria.id = :categoriaId")
-    int cambiarDisponibilidadCategoria(@Param("categoriaId") Long categoriaId,
-                                       @Param("disponible") Boolean disponible);
-
-    //NATIVE QUERIES (Q3)
-
-    // Productos más vendidos. Cada fila es un Object[] = {nombre, unidades vendidas}
+    // GET /api/v1/informes/productos-top?desde=&hasta=&limite=
+    // Productos más vendidos entre dos fechas. Cada fila es un Object[] = {nombre, unidades vendidas}
     @Query(value = "select pr.nombre, sum(pp.cantidad) from coffestation.producto_pedido pp " +
             "join coffestation.producto pr on pr.id = pp.producto_id " +
+            "join coffestation.pedido pe on pe.id = pp.pedido_id " +
+            "where pe.fecha_hora between :desde and :hasta " +
             "group by pr.nombre order by sum(pp.cantidad) desc limit :limite", nativeQuery = true)
-    List<Object[]> obtenerProductosMasVendidos(@Param("limite") int limite);
+    List<Object[]> obtenerProductosTop(@Param("desde") LocalDateTime desde,
+                                       @Param("hasta") LocalDateTime hasta,
+                                       @Param("limite") int limite);
+
+    // EXTRA: productos agotados
+    List<Producto> findByDisponibleFalse();
 
 }
