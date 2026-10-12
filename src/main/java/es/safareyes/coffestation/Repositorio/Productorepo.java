@@ -27,12 +27,13 @@ public interface Productorepo extends JpaRepository<Producto, Long> {
     Optional<Producto> findWithAlergenosById(Long id);
 
     // GET /api/v1/informes/productos-top?desde=&hasta=&limite=
-    // Productos más vendidos entre dos fechas. Cada fila es un Object[] = {nombre, unidades vendidas}
+    // Productos más vendidos entre dos fechas
     @Query(value = "select pr.nombre, sum(pp.cantidad) from coffestation.producto_pedido pp " +
             "join coffestation.producto pr on pr.id = pp.producto_id " +
             "join coffestation.pedido pe on pe.id = pp.pedido_id " +
             "where pe.fecha_hora between :desde and :hasta " +
             "group by pr.nombre order by sum(pp.cantidad) desc limit :limite", nativeQuery = true)
+    // Object[]: [0] = nombre del producto, [1] = unidades vendidas
     List<Object[]> obtenerProductosTop(@Param("desde") LocalDateTime desde,
                                        @Param("hasta") LocalDateTime hasta,
                                        @Param("limite") int limite);

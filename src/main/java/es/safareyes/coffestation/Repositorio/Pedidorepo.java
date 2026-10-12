@@ -28,9 +28,10 @@ public interface Pedidorepo extends JpaRepository<Pedido, Long> {
     Page<Pedido> findByFechaHoraBetween(LocalDateTime desde, LocalDateTime hasta, Pageable pageable);
 
     // GET /api/v1/informes/ventas-dia?fecha=
-    // Ventas entre dos momentos. Devuelve una fila: Object[] = {nº de pedidos, total, base, iva}
+    // Ventas entre dos momentos (devuelve una sola fila)
     @Query("select count(p), sum(p.base + p.iva), sum(p.base), sum(p.iva) " +
             "from Pedido p where p.fechaHora between :inicio and :fin")
+    // Object[]: [0] = nº de pedidos, [1] = total, [2] = base, [3] = iva
     List<Object[]> obtenerVentasDia(@Param("inicio") LocalDateTime inicio, @Param("fin") LocalDateTime fin);
 
 }
