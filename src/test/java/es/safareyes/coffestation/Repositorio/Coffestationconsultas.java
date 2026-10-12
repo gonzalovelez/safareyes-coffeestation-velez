@@ -59,7 +59,10 @@ public class Coffestationconsultas {
             System.out.println("Producto: " + producto.get().getNombre());
             for (Alergeno alergeno : producto.get().getAlergenos()) {
                 System.out.println("Alérgeno: " + alergeno.getNombre());
+
+
             }
+
         } else {
             System.out.println("No existe el producto");
         }
@@ -72,6 +75,7 @@ public class Coffestationconsultas {
         // Cada Object[] es una categoría: [0] = nombre, [1] = nº de productos activos
         List<Object[]> categorias = categoriarepo.obtenerCategoriasConProductos();
 
+
         for (Object[] fila : categorias) {
             String nombreCategoria = (String) fila[0];
             Long productosActivos = (Long) fila[1];
@@ -79,6 +83,7 @@ public class Coffestationconsultas {
             System.out.println("Categoría: " + nombreCategoria + " - Productos activos: " + productosActivos);
         }
     }
+
 
     // GET /api/v1/pedidos/{id}
     @Test
@@ -91,6 +96,7 @@ public class Coffestationconsultas {
             for (ProductoPedido linea : pedido.get().getLineas()) {
                 System.out.println("Producto: " + linea.getProducto().getNombre() + " x " + linea.getCantidad());
             }
+
         } else {
             System.out.println("No existe el pedido");
         }
@@ -104,13 +110,13 @@ public class Coffestationconsultas {
                 LocalDateTime.of(2026, 10, 1, 0, 0),
                 LocalDateTime.of(2026, 10, 2, 23, 59),
                 PageRequest.of(0, 10));
-
         System.out.println("Pedidos encontrados: " + pagina.getTotalElements());
 
         for (Pedido pedido : pagina.getContent()) {
             System.out.println("ID: " + pedido.getId() + " - Fecha: " + pedido.getFechaHora());
         }
     }
+
 
     // GET /api/v1/informes/ventas-dia?fecha=
     @Test
@@ -135,6 +141,7 @@ public class Coffestationconsultas {
     @Test
     void buscarProductosMasVendidos() {
 
+
         // Cada Object[] es un producto: [0] = nombre, [1] = unidades vendidas
         List<Object[]> top = productorepo.obtenerProductosTop(
                 LocalDateTime.of(2026, 10, 1, 0, 0),
@@ -144,7 +151,6 @@ public class Coffestationconsultas {
         for (Object[] fila : top) {
             String nombreProducto = (String) fila[0];
             Number unidadesVendidas = (Number) fila[1];
-
             System.out.println("Producto: " + nombreProducto + " - Unidades: " + unidadesVendidas);
         }
     }
@@ -154,13 +160,12 @@ public class Coffestationconsultas {
     void buscarProductosAgotados() {
 
         List<Producto> agotados = productorepo.findByDisponibleFalse();
-
         System.out.println("Productos agotados: " + agotados.size());
-
         for (Producto producto : agotados) {
             System.out.println("Nombre: " + producto.getNombre());
         }
     }
+
 
     // EXTRA
     @Test
