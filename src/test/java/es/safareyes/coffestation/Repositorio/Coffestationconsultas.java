@@ -69,6 +69,7 @@ public class Coffestationconsultas {
     @Test
     void buscarCategoriasConProductos() {
 
+        // Cada Object[] es una categoría: [0] = nombre, [1] = nº de productos activos
         List<Object[]> categorias = categoriarepo.obtenerCategoriasConProductos();
 
         for (Object[] fila : categorias) {
@@ -116,6 +117,7 @@ public class Coffestationconsultas {
     void buscarVentasDelDia() {
 
         LocalDate dia = LocalDate.of(2026, 10, 1);
+        // El Object[] es el resumen del día: [0] = nº de pedidos, [1] = total, [2] = base, [3] = iva
         Object[] ventas = pedidorepo.obtenerVentasDia(dia.atStartOfDay(), dia.atTime(23, 59, 59)).get(0);
 
         Long numeroPedidos = (Long) ventas[0];
@@ -133,6 +135,7 @@ public class Coffestationconsultas {
     @Test
     void buscarProductosMasVendidos() {
 
+        // Cada Object[] es un producto: [0] = nombre, [1] = unidades vendidas
         List<Object[]> top = productorepo.obtenerProductosTop(
                 LocalDateTime.of(2026, 10, 1, 0, 0),
                 LocalDateTime.of(2026, 10, 3, 23, 59),
