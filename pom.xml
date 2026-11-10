@@ -116,7 +116,7 @@
                             <goal>compile</goal>
                         </goals>
                         <configuration>
-                            <!-- El orden importa: primero Lombok (genera getters/setters),
+                            <!-- el orden importa: primero Lombok (genera getters/setters),
                                  luego el binding y por último MapStruct, que usa esos getters/setters -->
                             <annotationProcessorPaths>
                                 <path>
@@ -134,7 +134,7 @@
                                     <version>${mapstruct.version}</version>
                                 </path>
                             </annotationProcessorPaths>
-                            <!-- Los mappers generados serán beans de Spring (inyectables por constructor) -->
+                            <!-- los mappers generados serán beans de Spring (inyectables por constructor) -->
                             <compilerArgs>
                                 <arg>-Amapstruct.defaultComponentModel=spring</arg>
                             </compilerArgs>

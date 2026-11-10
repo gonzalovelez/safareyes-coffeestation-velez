@@ -25,13 +25,13 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.math.BigDecimal;
 import java.net.URI;
 
-// Endpoints 1 a 5 de la carta. El controlador solo recibe y devuelve DTOs:
-// no usa repositorios ni entidades, toda la lógica está en ProductoService.
+// endpoints 1 a 5 de la carta. el controlador solo recibe y devuelve DTOs:
+// ni toca repositorios ni devuelve entidades, todo el trabajo lo hace ProductoService.
 //
-// Roles (se aplicarán en la fase 4 con Spring Security; ahora todo está abierto):
-//   GET           -> público
-//   POST, PUT     -> ADMIN
-//   PATCH         -> ADMIN, BARISTA
+// roles (se pondrán en la fase 4 con Spring Security; de momento está todo abierto):
+//   GET        -> público
+//   POST, PUT  -> ADMIN
+//   PATCH      -> ADMIN, BARISTA
 @Slf4j
 @RestController
 @RequestMapping("/api/v1/productos")
@@ -41,8 +41,13 @@ public class ProductoController {
     private final ProductoService productoService;
 
     // 1. GET /api/v1/productos?categoriaId=&texto=&precioMax=&disponible=&sinAlergenoId=&page=&size=&sort=
-    // Carta paginada (por defecto 10 por página, ordenada por nombre). Todos los filtros son opcionales.
-    // 200 OK con la página de productos.
+    // carta paginada (10 por página y ordenada por nombre si no se dice otra cosa).
+    // todos los filtros son opcionales. devuelve 200 con la página.
+    //
+    // explicación para tontos del Pageable:
+    // Spring lee solo los parámetros page (qué página, empieza en 0), size (cuántos por página)
+    // y sort (por qué campo ordenar, p. ej. sort=precio,desc) y nos los da metidos en el objeto
+    // Pageable. @PageableDefault pone los valores por defecto si no llegan.
     @GetMapping
     public Page<ProductoResponse> listarCarta(
             @RequestParam(required = false) Long categoriaId,
@@ -56,7 +61,7 @@ public class ProductoController {
     }
 
     // 2. GET /api/v1/productos/{id}
-    // 200 OK con el producto y sus alérgenos; 404 si no existe o está dado de baja.
+    // 200 con el producto y sus alérgenos; 404 si no existe o está de baja
     @GetMapping("/{id}")
     public ProductoResponse obtenerPorId(@PathVariable Long id) {
         log.info("GET /productos/{}", id);
@@ -64,14 +69,16 @@ public class ProductoController {
     }
 
     // 3. POST /api/v1/productos  (ADMIN)
-    // 201 Created + cabecera Location con la URL del producto nuevo;
-    // 400 si los datos no son válidos; 404 si la categoría o algún alérgeno no existe.
+    // 201 + cabecera Location con la url del producto nuevo;
+    // 400 si los datos están mal; 404 si la categoría o algún alérgeno no existe.
+    // @Valid = antes de entrar aquí, Spring comprueba las validaciones del ProductoRequest
     @PostMapping
     public ResponseEntity<ProductoResponse> crear(@Valid @RequestBody ProductoRequest request) {
         log.info("POST /productos");
         ProductoResponse creado = productoService.crear(request);
 
-        // Location: http://localhost:8080/api/v1/productos/{id del nuevo}
+        // montamos la url del producto nuevo cogiendo la de esta petición y añadiendo el id:
+        // http://localhost:8080/api/v1/productos  ->  http://localhost:8080/api/v1/productos/21
         URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                 .path("/{id}")
                 .buildAndExpand(creado.id())
@@ -80,7 +87,7 @@ public class ProductoController {
     }
 
     // 4. PUT /api/v1/productos/{id}  (ADMIN)
-    // 200 OK con el producto modificado; 400 datos no válidos; 404 no existe; 422 dado de baja.
+    // 200 con el producto cambiado; 400 datos mal; 404 no existe; 422 está de baja
     @PutMapping("/{id}")
     public ProductoResponse actualizar(@PathVariable Long id, @Valid @RequestBody ProductoRequest request) {
         log.info("PUT /productos/{}", id);
@@ -88,8 +95,8 @@ public class ProductoController {
     }
 
     // 5. PATCH /api/v1/productos/{id}/disponibilidad  (ADMIN, BARISTA)
-    // Cuerpo: { "disponible": false } para marcarlo agotado, true para reponerlo.
-    // 200 OK con el producto; 400 si falta "disponible"; 404 no existe; 422 dado de baja.
+    // cuerpo: { "disponible": false } para marcarlo agotado, true para reponerlo.
+    // 200 con el producto; 400 si falta "disponible"; 404 no existe; 422 está de baja
     @PatchMapping("/{id}/disponibilidad")
     public ProductoResponse cambiarDisponibilidad(@PathVariable Long id,
                                                   @Valid @RequestBody DisponibilidadRequest request) {

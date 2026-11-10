@@ -33,20 +33,20 @@ public class Pedido {
     @Column (name = "iva")
     private BigDecimal iva;
 
-    // Lado con la FK (Pedido → Cliente)
+    // lado con la FK (Pedido → Cliente)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    // Lado inverso (Pedido → sus líneas en ProductoPedido)
+    // lado inverso (Pedido → sus líneas en ProductoPedido)
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private Set<ProductoPedido> lineas = new HashSet<>();
 
-    // Lado inverso (Pedido → sus cupones en PedidoCupones)
+    // lado inverso (Pedido → sus cupones en PedidoCupones)
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private Set<PedidoCupones> cupones = new HashSet<>();
 
-    // Lado inverso (Pedido → sus Descuentos)
+    // lado inverso (Pedido → sus Descuentos)
     @OneToMany(mappedBy = "pedido", fetch = FetchType.LAZY)
     private Set<Descuento> descuentos = new HashSet<>();
 

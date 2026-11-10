@@ -25,7 +25,7 @@ public class Categoria {
     @Column (name = "disponible")
     private Boolean disponible;
 
-    // Lado inverso (Categoria → sus Productos)
+    // lado inverso (Categoria → sus Productos)
     @OneToMany(mappedBy = "categoria", fetch = FetchType.LAZY)
     private Set<Producto> productos = new HashSet<>();
 

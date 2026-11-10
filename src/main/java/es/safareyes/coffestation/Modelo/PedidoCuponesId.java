@@ -10,7 +10,7 @@ import lombok.Setter;
 
 import java.io.Serializable;
 
-// Clave primaria compuesta de pedido_cupones: (pedido_id, cupon_id)
+// clave primaria compuesta de pedido_cupones: (pedido_id, cupon_id)
 @Embeddable
 @Getter@Setter@NoArgsConstructor@AllArgsConstructor@EqualsAndHashCode
 

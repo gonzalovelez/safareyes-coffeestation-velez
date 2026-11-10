@@ -22,7 +22,7 @@ public class Alergeno {
     @Column (name = "nombre")
     private String nombre;
 
-    // Lado inverso (Alergeno → sus Productos)
+    // lado inverso (Alergeno → sus Productos)
     @ManyToMany(mappedBy = "alergenos", fetch = FetchType.LAZY)
     private Set<Producto> productos = new HashSet<>();
 

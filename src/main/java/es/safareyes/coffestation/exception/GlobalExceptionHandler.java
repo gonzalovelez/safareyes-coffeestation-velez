@@ -15,14 +15,22 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-// Único punto donde se traducen las excepciones a respuestas HTTP.
-// Todas las respuestas de error usan ProblemDetail (RFC 9457):
-// { "type", "title", "status", "detail", "instance", ...propiedades extra }
+// aquí se convierten todas las excepciones en respuestas http con su código de error.
+//
+// explicación para tontos:
+// cuando algo peta en un controlador o en un servicio, la excepción "sube" hasta Spring.
+// @RestControllerAdvice hace que Spring mire en esta clase si hay un método @ExceptionHandler
+// para ese tipo de excepción, y lo que devuelva ese método es lo que le llega al cliente.
+// así los servicios solo tienen que hacer "throw new RecursoNoEncontradoException(...)"
+// y no se preocupan de códigos http.
+//
+// todos los errores salen con el formato ProblemDetail (estándar RFC 9457):
+// { "type", "title", "status", "detail", "instance", ...y lo que queramos añadir }
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
 
-    // 404: el recurso pedido no existe
+    // 404: lo que se busca no existe
     @ExceptionHandler(RecursoNoEncontradoException.class)
     public ProblemDetail manejarNoEncontrado(RecursoNoEncontradoException ex) {
         log.warn("404 - {}", ex.getMessage());
@@ -31,7 +39,7 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
-    // 422: la petición es correcta pero incumple una regla de negocio
+    // 422: la petición está bien escrita pero se salta una regla de negocio
     @ExceptionHandler(ReglaNegocioException.class)
     public ProblemDetail manejarReglaNegocio(ReglaNegocioException ex) {
         log.warn("422 - {}", ex.getMessage());
@@ -40,11 +48,12 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
-    // 400: falla alguna validación de un DTO (@NotBlank, @DecimalMin...).
-    // Se devuelve qué campo falla y por qué en la propiedad "errores".
+    // 400: no pasa las validaciones del DTO (@NotBlank, @DecimalMin...).
+    // en "errores" va cada campo que falla con su mensaje, p. ej. { "nombre": "El nombre es obligatorio" }
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ProblemDetail manejarValidacion(MethodArgumentNotValidException ex) {
         Map<String, String> errores = new LinkedHashMap<>();
+        // putIfAbsent: si un campo falla dos validaciones, nos quedamos solo con el primer mensaje
         ex.getBindingResult().getFieldErrors()
                 .forEach(error -> errores.putIfAbsent(error.getField(), error.getDefaultMessage()));
         log.warn("400 - Datos no válidos: {}", errores);
@@ -56,7 +65,7 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
-    // 400: el cuerpo no es un JSON válido o un campo tiene un tipo incorrecto ("precio": "abc")
+    // 400: el cuerpo no es un json válido o un campo viene con un tipo raro ("precio": "abc")
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail manejarJsonIlegible(HttpMessageNotReadableException ex) {
         log.warn("400 - JSON ilegible: {}", ex.getMessage());
@@ -66,7 +75,7 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
-    // 400: un parámetro de la URL tiene un tipo incorrecto (/productos/abc o ?precioMax=caro)
+    // 400: un parámetro de la url no es del tipo que toca (/productos/abc o ?precioMax=caro)
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ProblemDetail manejarTipoParametro(MethodArgumentTypeMismatchException ex) {
         log.warn("400 - Parámetro '{}' con valor no válido: {}", ex.getName(), ex.getValue());
@@ -76,7 +85,7 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
-    // 400: se pide ordenar por un campo que no existe (?sort=noexiste)
+    // 400: se intenta ordenar por un campo que no existe (?sort=noexiste)
     @ExceptionHandler(PropertyReferenceException.class)
     public ProblemDetail manejarOrdenNoValido(PropertyReferenceException ex) {
         log.warn("400 - Orden no válido: {}", ex.getMessage());
@@ -86,12 +95,14 @@ public class GlobalExceptionHandler {
         return problema;
     }
 
-    // 500: cualquier error no previsto. Se registra completo en el log,
-    // pero al cliente no se le enseña la traza (podría revelar detalles internos).
+    // 500: cualquier otro error que no hayamos previsto.
+    // en el log se guarda entero, pero al cliente no le enseñamos la traza
+    // (le daríamos pistas de cómo está hecho el programa por dentro).
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> manejarErrorInesperado(Exception ex) {
-        // Las excepciones propias de Spring MVC (405 método no permitido, 404 ruta inexistente, 415...)
-        // ya traen su código y su ProblemDetail: se devuelven tal cual en vez de convertirlas en 500
+        // ojo: este método lo pilla todo, también los errores normales de Spring
+        // (405 método no permitido, 404 ruta que no existe, 415...). esos ya traen su código
+        // y su ProblemDetail, así que los devolvemos tal cual en vez de convertirlos en un 500
         if (ex instanceof ErrorResponse errorSpring) {
             return ResponseEntity.status(errorSpring.getStatusCode()).body(errorSpring.getBody());
         }

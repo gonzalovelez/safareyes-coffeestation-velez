@@ -3,8 +3,8 @@ package es.safareyes.coffestation.dto.response;
 import java.math.BigDecimal;
 import java.util.List;
 
-// Lo que devuelve la API de un producto (carta y detalle).
-// Aplanado: la categoría y los alérgenos van por su nombre, no como objetos.
+// lo que devuelve la API de un producto (carta y detalle).
+// aplanado: la categoría y los alérgenos van por su nombre, no como objetos.
 public record ProductoResponse(
         Long id,
         String nombre,

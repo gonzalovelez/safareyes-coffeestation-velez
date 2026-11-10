@@ -24,7 +24,7 @@ public class Descuento {
     @Column (name = "origen")
     private String origen;
 
-    // Lado con la FK (Descuento → Pedido)
+    // lado con la FK (Descuento → Pedido)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "pedido_id")
     private Pedido pedido;

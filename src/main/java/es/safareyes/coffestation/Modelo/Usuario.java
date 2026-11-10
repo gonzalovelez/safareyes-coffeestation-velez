@@ -25,7 +25,7 @@ public class Usuario {
     @Column (name = "rol")
     private String rol;
 
-    // Lado inverso (Usuario → Cliente)
+    // lado inverso (Usuario → Cliente)
     @OneToOne(mappedBy = "usuario", fetch = FetchType.LAZY)
     private Cliente cliente;
 

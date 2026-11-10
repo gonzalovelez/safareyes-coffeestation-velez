@@ -6,11 +6,11 @@ import jakarta.validation.constraints.Size;
 
 import java.util.List;
 
-// Lo que llega al crear un pedido (POST /pedidos).
+// lo que llega al crear un pedido (POST /pedidos).
 // codigoCupon y dniSocio son opcionales (RN-07: se aplica el mayor descuento, no los dos).
 public record PedidoRequest(
 
-        // Opcional: un pedido de barra puede no tener cliente
+        // opcional: un pedido de barra puede no tener cliente
         Long clienteId,
 
         // RN-04: de 1 a 15 líneas. @Valid hace que también se valide cada línea por dentro

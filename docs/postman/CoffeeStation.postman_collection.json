@@ -16,8 +16,8 @@
               "name": "Carta completa (página 0)",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?page=0&size=10",
-                "description": "Primera página de la carta. 'page' trae size, number, totalElements y totalPages."
+                "url": "{{baseUrl}}/productos?page=0&size=50",
+                "description": "Carta completa en una sola página. 'page' trae size, number, totalElements y totalPages. RN-01: no salen la Ensaimada ni el Zumo de naranja, que están dados de baja."
               },
               "event": [
                 {
@@ -26,7 +26,11 @@
                     "type": "text/javascript",
                     "exec": [
                       "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.test('18 productos activos (hay 2 de baja)', () => pm.expect(pm.response.json().page.totalElements).to.eql(18));"
+                      "const nombres = pm.response.json().content.map(p => p.nombre);",
+                      "pm.test('No salen los productos de baja (RN-01)', () => {",
+                      "    pm.expect(nombres).to.not.include('Ensaimada');",
+                      "    pm.expect(nombres).to.not.include('Zumo de naranja');",
+                      "});"
                     ]
                   }
                 }

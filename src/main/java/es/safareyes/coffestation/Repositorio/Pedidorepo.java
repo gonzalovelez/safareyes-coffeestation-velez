@@ -18,17 +18,17 @@ import java.util.Optional;
 public interface Pedidorepo extends JpaRepository<Pedido, Long> {
 
     // GET /api/v1/pedidos/{id}
-    // Detalle de un pedido con sus líneas y sus productos en una sola consulta
+    // detalle de un pedido con sus líneas y sus productos en una sola consulta
     @EntityGraph(attributePaths = {"lineas", "lineas.producto"})
     @Query("select p from Pedido p where p.id = :id")
     Optional<Pedido> obtenerPedidoConLineas(@Param("id") Long id);
 
     // GET /api/v1/pedidos
-    // Listado paginado de pedidos entre dos fechas (?page=&size=&sort=)
+    // listado paginado de pedidos entre dos fechas (?page=&size=&sort=)
     Page<Pedido> findByFechaHoraBetween(LocalDateTime desde, LocalDateTime hasta, Pageable pageable);
 
     // GET /api/v1/informes/ventas-dia?fecha=
-    // Ventas entre dos momentos (devuelve una sola fila)
+    // ventas entre dos momentos (devuelve una sola fila)
     @Query("select count(p), sum(p.base + p.iva), sum(p.base), sum(p.iva) " +
             "from Pedido p where p.fechaHora between :inicio and :fin")
     // Object[]: [0] = nº de pedidos, [1] = total, [2] = base, [3] = iva

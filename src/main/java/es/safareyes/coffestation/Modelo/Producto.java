@@ -35,12 +35,12 @@ public class Producto {
     @Column (name = "disponible")
     private Boolean disponible;
 
-    // Lado con la FK (Producto → Categoria)
+    // lado con la FK (Producto → Categoria)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "categoria_id")
     private Categoria categoria;
 
-    // Lado propietario de la N:M (Producto → Alergenos, tabla alergeno_producto)
+    // lado propietario de la N:M (Producto → Alergenos, tabla alergeno_producto)
     @ManyToMany(fetch = FetchType.LAZY)
     @JoinTable(
             name = "alergeno_producto",
@@ -49,7 +49,7 @@ public class Producto {
             inverseJoinColumns = @JoinColumn(name = "alergeno_id"))
     private Set<Alergeno> alergenos = new HashSet<>();
 
-    // Lado inverso (Producto → sus líneas en ProductoPedido)
+    // lado inverso (Producto → sus líneas en ProductoPedido)
     @OneToMany(mappedBy = "producto", fetch = FetchType.LAZY)
     private Set<ProductoPedido> lineas = new HashSet<>();
 

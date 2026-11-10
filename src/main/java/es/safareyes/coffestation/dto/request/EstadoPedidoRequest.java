@@ -3,8 +3,8 @@ package es.safareyes.coffestation.dto.request;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 
-// Cuerpo de PATCH /pedidos/{id}/estado
-// Ejemplo: { "estado": "EN_PREPARACION" }
+// cuerpo de PATCH /pedidos/{id}/estado
+// ejemplo: { "estado": "EN_PREPARACION" }
 public record EstadoPedidoRequest(
 
         @NotBlank(message = "Hay que indicar el nuevo estado")
