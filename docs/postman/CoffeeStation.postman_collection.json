@@ -11,56 +11,56 @@
           "name": "1. GET /productos",
           "item": [
             {
-              "name": "Carta",
+              "name": "[PRINCIPAL] Carta",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?page=0&size=10"
               }
             },
             {
-              "name": "Por categoría",
+              "name": "[FILTRO] Por categoría",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?categoriaId=1"
               }
             },
             {
-              "name": "Por texto",
+              "name": "[FILTRO] Por texto",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?texto=café"
               }
             },
             {
-              "name": "Precio máximo",
+              "name": "[FILTRO] Precio máximo",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?precioMax=1.50"
               }
             },
             {
-              "name": "Solo agotados",
+              "name": "[FILTRO] Solo agotados",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?disponible=false"
               }
             },
             {
-              "name": "Sin alérgeno (lácteos)",
+              "name": "[FILTRO] Sin alérgeno (lácteos)",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?sinAlergenoId=7"
               }
             },
             {
-              "name": "Filtros combinados",
+              "name": "[FILTRO] Filtros combinados",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?categoriaId=4&sinAlergenoId=3&precioMax=4&disponible=true"
               }
             },
             {
-              "name": "RN-01: producto de baja no sale",
+              "name": "[RN-01] Producto de baja no sale",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?texto=ensaimada"
@@ -72,21 +72,21 @@
           "name": "2. GET /productos/{id}",
           "item": [
             {
-              "name": "Detalle con alérgenos",
+              "name": "[PRINCIPAL] Detalle con alérgenos",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos/9"
               }
             },
             {
-              "name": "404 no existe",
+              "name": "[ERROR 404] No existe",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos/9999"
               }
             },
             {
-              "name": "RN-01: producto de baja (404)",
+              "name": "[RN-01] Producto de baja da 404",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos/12"
@@ -98,7 +98,7 @@
           "name": "3. POST /productos",
           "item": [
             {
-              "name": "Crear producto",
+              "name": "[PRINCIPAL] Crear producto (201 + Location)",
               "request": {
                 "method": "POST",
                 "url": "{{baseUrl}}/productos",
@@ -115,7 +115,7 @@
               }
             },
             {
-              "name": "400 sin nombre ni precio",
+              "name": "[ERROR 400] Sin nombre ni precio",
               "request": {
                 "method": "POST",
                 "url": "{{baseUrl}}/productos",
@@ -132,7 +132,7 @@
               }
             },
             {
-              "name": "404 categoría no existe",
+              "name": "[ERROR 404] Categoría no existe",
               "request": {
                 "method": "POST",
                 "url": "{{baseUrl}}/productos",
@@ -149,7 +149,7 @@
               }
             },
             {
-              "name": "404 alérgeno no existe",
+              "name": "[ERROR 404] Alérgeno no existe",
               "request": {
                 "method": "POST",
                 "url": "{{baseUrl}}/productos",
@@ -171,7 +171,7 @@
           "name": "4. PUT /productos/{id}",
           "item": [
             {
-              "name": "Modificar producto",
+              "name": "[PRINCIPAL] Modificar producto",
               "request": {
                 "method": "PUT",
                 "url": "{{baseUrl}}/productos/21",
@@ -188,7 +188,7 @@
               }
             },
             {
-              "name": "404 no existe",
+              "name": "[ERROR 404] No existe",
               "request": {
                 "method": "PUT",
                 "url": "{{baseUrl}}/productos/9999",
@@ -205,7 +205,7 @@
               }
             },
             {
-              "name": "RN-01: producto de baja (422)",
+              "name": "[EXTRA] Producto de baja da 422",
               "request": {
                 "method": "PUT",
                 "url": "{{baseUrl}}/productos/12",
@@ -227,7 +227,7 @@
           "name": "5. PATCH /productos/{id}/disponibilidad",
           "item": [
             {
-              "name": "Marcar agotado",
+              "name": "[PRINCIPAL] Marcar agotado",
               "request": {
                 "method": "PATCH",
                 "url": "{{baseUrl}}/productos/21/disponibilidad",
@@ -244,7 +244,7 @@
               }
             },
             {
-              "name": "Reponer",
+              "name": "[PRINCIPAL] Reponer",
               "request": {
                 "method": "PATCH",
                 "url": "{{baseUrl}}/productos/21/disponibilidad",
@@ -261,7 +261,7 @@
               }
             },
             {
-              "name": "404 no existe",
+              "name": "[ERROR 404] No existe",
               "request": {
                 "method": "PATCH",
                 "url": "{{baseUrl}}/productos/9999/disponibilidad",
@@ -278,7 +278,7 @@
               }
             },
             {
-              "name": "RN-01: producto de baja (422)",
+              "name": "[EXTRA] Producto de baja da 422",
               "request": {
                 "method": "PATCH",
                 "url": "{{baseUrl}}/productos/12/disponibilidad",
