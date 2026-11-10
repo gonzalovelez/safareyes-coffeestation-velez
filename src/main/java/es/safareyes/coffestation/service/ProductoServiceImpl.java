@@ -41,7 +41,7 @@ public class ProductoServiceImpl implements ProductoService {
     // ---------------------------------------------------------------------------------------
     // endpoint 1 - GET /api/v1/productos
     //
-    // explicación para tontos de @Transactional(readOnly = true):
+    // @Transactional(readOnly = true):
     // aquí no se guarda nada, pero los alérgenos son LAZY (no se cargan hasta que alguien los pide).
     // el mapper los pide al convertir a DTO, y para eso la conexión con la bd tiene que seguir abierta.
     // la transacción la mantiene abierta hasta que acaba el método. sin ella saltaría la típica
@@ -103,7 +103,7 @@ public class ProductoServiceImpl implements ProductoService {
     // ---------------------------------------------------------------------------------------
     // endpoint 4 - PUT /api/v1/productos/{id}
     //
-    // explicación para tontos de por qué no hay save():
+    // por qué no hay save():
     // el producto lo hemos sacado de la bd dentro de la transacción, así que Hibernate lo está
     // "vigilando". al acabar el método compara cómo estaba con cómo está y lanza él solo el update.
     // ---------------------------------------------------------------------------------------

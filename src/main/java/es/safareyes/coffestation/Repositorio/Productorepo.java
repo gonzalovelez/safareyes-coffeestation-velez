@@ -23,7 +23,6 @@ public interface Productorepo extends JpaRepository<Producto, Long>, JpaSpecific
     // GET /api/v1/productos (endpoint 1)
     // carta paginada con los filtros de ProductoSpecification.
     //
-    // explicación para tontos:
     // este método ya existe (viene de JpaSpecificationExecutor), lo repetimos solo para ponerle
     // el @EntityGraph. sin él, al sacar 10 productos Hibernate haría 1 consulta para los productos
     // y luego 1 más por cada producto para buscar su categoría (el famoso problema N+1).

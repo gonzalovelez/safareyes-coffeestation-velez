@@ -17,7 +17,6 @@ import java.util.Map;
 
 // aquí se convierten todas las excepciones en respuestas http con su código de error.
 //
-// explicación para tontos:
 // cuando algo peta en un controlador o en un servicio, la excepción "sube" hasta Spring.
 // @RestControllerAdvice hace que Spring mire en esta clase si hay un método @ExceptionHandler
 // para ese tipo de excepción, y lo que devuelva ese método es lo que le llega al cliente.
