@@ -18,42 +18,42 @@
               }
             },
             {
-              "name": "[FILTRO] Por categoría",
+              "name": "[RF-02] Por categoría",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?categoriaId=1"
               }
             },
             {
-              "name": "[FILTRO] Por texto",
+              "name": "[RF-02] Por texto",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?texto=café"
               }
             },
             {
-              "name": "[FILTRO] Precio máximo",
+              "name": "[RF-02] Precio máximo",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?precioMax=1.50"
               }
             },
             {
-              "name": "[FILTRO] Solo agotados",
+              "name": "[RF-02] Solo agotados",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?disponible=false"
               }
             },
             {
-              "name": "[FILTRO] Sin alérgeno (lácteos)",
+              "name": "[RF-02] Sin alérgeno (lácteos)",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?sinAlergenoId=7"
               }
             },
             {
-              "name": "[FILTRO] Filtros combinados",
+              "name": "[RF-02] Filtros combinados",
               "request": {
                 "method": "GET",
                 "url": "{{baseUrl}}/productos?categoriaId=4&sinAlergenoId=3&precioMax=4&disponible=true"
