@@ -1,7 +1,6 @@
 {
   "info": {
     "name": "CoffeeStation",
-    "description": "API REST de la cafetería CoffeeStation. Usa el entorno 'CoffeeStation local' (variable baseUrl).",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
   },
   "item": [
@@ -9,328 +8,100 @@
       "name": "Productos",
       "item": [
         {
-          "name": "1. GET /productos - Carta con filtros",
-          "description": "Carta paginada (10 por página, ordenada por nombre). Filtros opcionales y combinables: categoriaId, texto, precioMax, disponible, sinAlergenoId. RN-01: nunca salen productos dados de baja.",
+          "name": "1. GET /productos",
           "item": [
             {
-              "name": "Carta completa (página 0)",
+              "name": "Carta",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?page=0&size=50",
-                "description": "Carta completa en una sola página. 'page' trae size, number, totalElements y totalPages. RN-01: no salen la Ensaimada ni el Zumo de naranja, que están dados de baja."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "const nombres = pm.response.json().content.map(p => p.nombre);",
-                      "pm.test('No salen los productos de baja (RN-01)', () => {",
-                      "    pm.expect(nombres).to.not.include('Ensaimada');",
-                      "    pm.expect(nombres).to.not.include('Zumo de naranja');",
-                      "});"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos?page=0&size=10"
+              }
             },
             {
-              "name": "Filtro: por categoría (Cafés)",
+              "name": "Por categoría",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?categoriaId=1",
-                "description": "Solo productos de la categoría 1 (Cafés)."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.response.json().content.forEach(p => pm.expect(p.categoria === 'Cafés').to.be.true);"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos?categoriaId=1"
+              }
             },
             {
-              "name": "Filtro: texto en el nombre",
+              "name": "Por texto",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?texto=café",
-                "description": "Productos cuyo nombre contiene 'café' (sin distinguir mayúsculas)."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.response.json().content.forEach(p => pm.expect(p.nombre.toLowerCase().includes('café')).to.be.true);"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos?texto=café"
+              }
             },
             {
-              "name": "Filtro: precio máximo",
+              "name": "Precio máximo",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?precioMax=1.50",
-                "description": "Productos de 1,50 € o menos."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.response.json().content.forEach(p => pm.expect(p.precio <= 1.50).to.be.true);"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos?precioMax=1.50"
+              }
             },
             {
-              "name": "Filtro: solo agotados",
+              "name": "Solo agotados",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?disponible=false",
-                "description": "Productos activos marcados como agotados (Café bombón y la bollería). La Ensaimada también está agotada pero no sale porque está dada de baja (RN-01)."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.response.json().content.forEach(p => pm.expect(p.disponible === false).to.be.true);",
-                      "pm.test('No sale la Ensaimada (de baja)', () => pm.expect(pm.response.json().content.map(p => p.nombre)).to.not.include('Ensaimada'));"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos?disponible=false"
+              }
             },
             {
-              "name": "Filtro: sin un alérgeno (sin lácteos)",
+              "name": "Sin alérgeno (lácteos)",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?sinAlergenoId=7",
-                "description": "Productos que NO contienen el alérgeno 7 (Lácteos)."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.response.json().content.forEach(p => pm.expect(!p.alergenos.includes('Lácteos')).to.be.true);"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos?sinAlergenoId=7"
+              }
             },
             {
               "name": "Filtros combinados",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?categoriaId=4&sinAlergenoId=3&precioMax=4&disponible=true",
-                "description": "Bocadillos sin huevo, de 4 € o menos y disponibles. Se pueden combinar todos los filtros."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.response.json().content.forEach(p => pm.expect(p.categoria === 'Bocadillos' && !p.alergenos.includes('Huevo') && p.precio <= 4 && p.disponible).to.be.true);"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos?categoriaId=4&sinAlergenoId=3&precioMax=4&disponible=true"
+              }
             },
             {
-              "name": "Ordenar por precio descendente",
+              "name": "RN-01: producto de baja no sale",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?sort=precio,desc&size=5",
-                "description": "Los 5 productos más caros de la carta."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "const precios = pm.response.json().content.map(p => p.precio);",
-                      "pm.test('Ordenado de mayor a menor', () => pm.expect(precios).to.eql([...precios].sort((a, b) => b - a)));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "RN-01: producto de baja no sale en la carta",
-              "request": {
-                "method": "GET",
-                "url": "{{baseUrl}}/productos?texto=ensaimada",
-                "description": "La Ensaimada (id 12) está dada de baja: no aparece en la carta aunque se busque por su nombre."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.test('Ningún resultado', () => pm.expect(pm.response.json().page.totalElements).to.eql(0));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Error: precio no numérico (400)",
-              "request": {
-                "method": "GET",
-                "url": "{{baseUrl}}/productos?precioMax=caro",
-                "description": "Un filtro con un tipo incorrecto devuelve 400 con ProblemDetail."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Error: ordenar por un campo que no existe (400)",
-              "request": {
-                "method": "GET",
-                "url": "{{baseUrl}}/productos?sort=noexiste",
-                "description": "Ordenar por un campo inexistente devuelve 400."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos?texto=ensaimada"
+              }
             }
           ]
         },
         {
-          "name": "2. GET /productos/{id} - Detalle",
-          "description": "Detalle de un producto activo con sus alérgenos.",
+          "name": "2. GET /productos/{id}",
           "item": [
             {
-              "name": "Detalle con alérgenos (Croissant)",
+              "name": "Detalle con alérgenos",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos/9",
-                "description": "El Croissant tiene gluten, huevo y lácteos."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.test('Tiene 3 alérgenos', () => pm.expect(pm.response.json().alergenos).to.have.lengthOf(3));"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos/9"
+              }
             },
             {
-              "name": "Error: producto inexistente (404)",
+              "name": "404 no existe",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos/9999",
-                "description": "Un id que no existe devuelve 404."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 404', () => pm.response.to.have.status(404));"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos/9999"
+              }
             },
             {
-              "name": "RN-01: producto dado de baja (404)",
+              "name": "RN-01: producto de baja (404)",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos/12",
-                "description": "La Ensaimada está dada de baja: ya no forma parte de la carta y se responde 404."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 404', () => pm.response.to.have.status(404));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Error: id no numérico (400)",
-              "request": {
-                "method": "GET",
-                "url": "{{baseUrl}}/productos/abc",
-                "description": "Un id que no es un número devuelve 400."
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));"
-                    ]
-                  }
-                }
-              ]
+                "url": "{{baseUrl}}/productos/12"
+              }
             }
           ]
         },
         {
-          "name": "3. POST /productos - Alta (ADMIN)",
-          "description": "Alta de producto. Nace activo y disponible. Responde 201 con la cabecera Location. Ejecuta primero 'Crear producto': guarda su id en la variable productoCreadoId, que usan los endpoints 4 y 5 para no modificar los datos de prueba.",
+          "name": "3. POST /productos",
           "item": [
             {
               "name": "Crear producto",
               "request": {
                 "method": "POST",
                 "url": "{{baseUrl}}/productos",
-                "description": "Crea un producto con categoría y alérgenos. 201 + Location: /api/v1/productos/{id}.",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -339,31 +110,15 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"Muffin de arándanos\",\n  \"descripcion\": \"Muffin casero con arándanos\",\n  \"precio\": 2.1,\n  \"categoriaId\": 3,\n  \"alergenosIds\": [\n    1,\n    3,\n    7\n  ]\n}"
+                  "raw": "{\"nombre\": \"Muffin de arándanos\", \"descripcion\": \"Muffin casero con arándanos\", \"precio\": 2.1, \"categoriaId\": 3, \"alergenosIds\": [1, 3, 7]}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 201', () => pm.response.to.have.status(201));",
-                      "pm.test('Cabecera Location', () => pm.response.to.have.header('Location'));",
-                      "const p = pm.response.json();",
-                      "pm.test('Nace disponible', () => pm.expect(p.disponible).to.be.true);",
-                      "pm.collectionVariables.set('productoCreadoId', p.id);"
-                    ]
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "Error: sin nombre ni precio (400)",
+              "name": "400 sin nombre ni precio",
               "request": {
                 "method": "POST",
                 "url": "{{baseUrl}}/productos",
-                "description": "Faltan campos obligatorios: la respuesta indica cada campo en 'errores'.",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -372,28 +127,15 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"descripcion\": \"Sin nombre\",\n  \"categoriaId\": 1\n}"
+                  "raw": "{\"descripcion\": \"Sin nombre\", \"categoriaId\": 1}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));",
-                      "pm.test('Indica los campos', () => pm.expect(pm.response.json().errores).to.have.keys('nombre', 'precio'));"
-                    ]
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "Error: precio negativo (400)",
+              "name": "404 categoría no existe",
               "request": {
                 "method": "POST",
                 "url": "{{baseUrl}}/productos",
-                "description": "El precio tiene que ser mayor que 0.",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -402,27 +144,15 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"Café gratis\",\n  \"precio\": -1.0,\n  \"categoriaId\": 1\n}"
+                  "raw": "{\"nombre\": \"Prueba\", \"precio\": 1.0, \"categoriaId\": 99}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));"
-                    ]
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "Error: precio con 3 decimales (400)",
+              "name": "404 alérgeno no existe",
               "request": {
                 "method": "POST",
                 "url": "{{baseUrl}}/productos",
-                "description": "El dinero admite como mucho 2 decimales.",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -431,120 +161,20 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"Café raro\",\n  \"precio\": 1.555,\n  \"categoriaId\": 1\n}"
+                  "raw": "{\"nombre\": \"Prueba\", \"precio\": 1.0, \"categoriaId\": 1, \"alergenosIds\": [1, 99]}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Error: categoría inexistente (404)",
-              "request": {
-                "method": "POST",
-                "url": "{{baseUrl}}/productos",
-                "description": "La categoría 99 no existe.",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"Producto huérfano\",\n  \"precio\": 1.0,\n  \"categoriaId\": 99\n}"
-                }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 404', () => pm.response.to.have.status(404));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Error: alérgeno inexistente (404)",
-              "request": {
-                "method": "POST",
-                "url": "{{baseUrl}}/productos",
-                "description": "El alérgeno 99 no existe: el mensaje indica qué ids fallan.",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"Producto raro\",\n  \"precio\": 1.0,\n  \"categoriaId\": 1,\n  \"alergenosIds\": [\n    1,\n    99\n  ]\n}"
-                }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 404', () => pm.response.to.have.status(404));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Error: JSON mal formado (400)",
-              "request": {
-                "method": "POST",
-                "url": "{{baseUrl}}/productos",
-                "description": "El cuerpo no es un JSON válido.",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{ \"nombre\": \"Sin cerrar\", "
-                }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));"
-                    ]
-                  }
-                }
-              ]
+              }
             }
           ]
         },
         {
-          "name": "4. PUT /productos/{id} - Modificación (ADMIN)",
-          "description": "Modifica nombre, descripción, precio, categoría y alérgenos. RN-03: cambiar el precio no afecta a los pedidos ya hechos, porque cada línea guarda su precio unitario.",
+          "name": "4. PUT /productos/{id}",
           "item": [
             {
               "name": "Modificar producto",
               "request": {
                 "method": "PUT",
-                "url": "{{baseUrl}}/productos/{{productoCreadoId}}",
-                "description": "Modifica el producto creado en el endpoint 3: sube el precio y le quita el huevo.",
+                "url": "{{baseUrl}}/productos/21",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -553,30 +183,15 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"Muffin de arándanos\",\n  \"descripcion\": \"Muffin casero, ahora más grande\",\n  \"precio\": 2.4,\n  \"categoriaId\": 3,\n  \"alergenosIds\": [\n    1,\n    7\n  ]\n}"
+                  "raw": "{\"nombre\": \"Muffin de arándanos\", \"descripcion\": \"Muffin casero, ahora más grande\", \"precio\": 2.4, \"categoriaId\": 3, \"alergenosIds\": [1, 7]}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "const p = pm.response.json();",
-                      "pm.test('Precio actualizado', () => pm.expect(p.precio).to.eql(2.40));",
-                      "pm.test('Alérgenos sustituidos', () => pm.expect(p.alergenos).to.have.lengthOf(2));"
-                    ]
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "Error: producto inexistente (404)",
+              "name": "404 no existe",
               "request": {
                 "method": "PUT",
                 "url": "{{baseUrl}}/productos/9999",
-                "description": "Un id que no existe devuelve 404.",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -585,27 +200,15 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"No existe\",\n  \"precio\": 1.0,\n  \"categoriaId\": 1\n}"
+                  "raw": "{\"nombre\": \"Prueba\", \"precio\": 1.0, \"categoriaId\": 1}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 404', () => pm.response.to.have.status(404));"
-                    ]
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "RN-01: producto dado de baja (422)",
+              "name": "RN-01: producto de baja (422)",
               "request": {
                 "method": "PUT",
                 "url": "{{baseUrl}}/productos/12",
-                "description": "La Ensaimada está dada de baja y no se puede modificar.",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -614,62 +217,20 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"Ensaimada\",\n  \"precio\": 1.9,\n  \"categoriaId\": 3\n}"
+                  "raw": "{\"nombre\": \"Ensaimada\", \"precio\": 1.9, \"categoriaId\": 3}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 422', () => pm.response.to.have.status(422));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Error: datos no válidos (400)",
-              "request": {
-                "method": "PUT",
-                "url": "{{baseUrl}}/productos/{{productoCreadoId}}",
-                "description": "Nombre vacío y sin categoría.",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{\n  \"nombre\": \"\",\n  \"precio\": 2.0\n}"
-                }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));"
-                    ]
-                  }
-                }
-              ]
+              }
             }
           ]
         },
         {
-          "name": "5. PATCH /productos/{id}/disponibilidad (ADMIN, BARISTA)",
-          "description": "Marca un producto como agotado (false) o disponible (true).",
+          "name": "5. PATCH /productos/{id}/disponibilidad",
           "item": [
             {
-              "name": "Marcar como agotado",
+              "name": "Marcar agotado",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/productos/{{productoCreadoId}}/disponibilidad",
-                "description": "El producto creado en el endpoint 3 se queda sin existencias.",
+                "url": "{{baseUrl}}/productos/21/disponibilidad",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -678,28 +239,15 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"disponible\": false\n}"
+                  "raw": "{\"disponible\": false}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.test('Agotado', () => pm.expect(pm.response.json().disponible).to.be.false);"
-                    ]
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "Reponer (disponible)",
+              "name": "Reponer",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/productos/{{productoCreadoId}}/disponibilidad",
-                "description": "Vuelve a haber existencias.",
+                "url": "{{baseUrl}}/productos/21/disponibilidad",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -708,57 +256,15 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"disponible\": true\n}"
+                  "raw": "{\"disponible\": true}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 200', () => pm.response.to.have.status(200));",
-                      "pm.test('Disponible', () => pm.expect(pm.response.json().disponible).to.be.true);"
-                    ]
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "Error: falta 'disponible' (400)",
-              "request": {
-                "method": "PATCH",
-                "url": "{{baseUrl}}/productos/{{productoCreadoId}}/disponibilidad",
-                "description": "El campo disponible es obligatorio.",
-                "header": [
-                  {
-                    "key": "Content-Type",
-                    "value": "application/json"
-                  }
-                ],
-                "body": {
-                  "mode": "raw",
-                  "raw": "{}"
-                }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 400', () => pm.response.to.have.status(400));"
-                    ]
-                  }
-                }
-              ]
-            },
-            {
-              "name": "Error: producto inexistente (404)",
+              "name": "404 no existe",
               "request": {
                 "method": "PATCH",
                 "url": "{{baseUrl}}/productos/9999/disponibilidad",
-                "description": "Un id que no existe devuelve 404.",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -767,27 +273,15 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"disponible\": false\n}"
+                  "raw": "{\"disponible\": false}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 404', () => pm.response.to.have.status(404));"
-                    ]
-                  }
-                }
-              ]
+              }
             },
             {
-              "name": "RN-01: producto dado de baja (422)",
+              "name": "RN-01: producto de baja (422)",
               "request": {
                 "method": "PATCH",
                 "url": "{{baseUrl}}/productos/12/disponibilidad",
-                "description": "La Ensaimada está dada de baja: no se puede cambiar su disponibilidad.",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -796,33 +290,13 @@
                 ],
                 "body": {
                   "mode": "raw",
-                  "raw": "{\n  \"disponible\": true\n}"
+                  "raw": "{\"disponible\": true}"
                 }
-              },
-              "event": [
-                {
-                  "listen": "test",
-                  "script": {
-                    "type": "text/javascript",
-                    "exec": [
-                      "pm.test('Devuelve 422', () => pm.response.to.have.status(422));"
-                    ]
-                  }
-                }
-              ]
+              }
             }
           ]
         }
-      ],
-      "description": "Endpoints 1 a 5 de la carta, con ejemplos y casos de reglas de negocio."
-    }
-  ],
-  "variable": [
-    {
-      "key": "productoCreadoId",
-      "value": "",
-      "type": "default",
-      "description": "Id del producto creado en '3. POST /productos > Crear producto'"
+      ]
     }
   ]
 }
