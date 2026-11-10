@@ -42,12 +42,12 @@ public class Cupones {
     @Column (name = "importe_minimo")
     private BigDecimal importeMinimo;
 
-    // Lado con la FK (Cupones → Cliente)
+    // lado con la FK (Cupones → Cliente)
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "cliente_id")
     private Cliente cliente;
 
-    // Lado inverso (Cupones → sus usos en PedidoCupones)
+    // lado inverso (Cupones → sus usos en PedidoCupones)
     @OneToMany(mappedBy = "cupon", fetch = FetchType.LAZY)
     private Set<PedidoCupones> usos = new HashSet<>();
 

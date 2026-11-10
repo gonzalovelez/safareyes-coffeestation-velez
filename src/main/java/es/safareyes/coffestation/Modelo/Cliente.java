@@ -28,16 +28,16 @@ public class Cliente {
     @Column (name = "dni")
     private String dni;
 
-    // Lado con la FK (Cliente → Usuario)
+    // lado con la FK (Cliente → Usuario)
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    // Lado inverso (Cliente → sus Pedidos)
+    // lado inverso (Cliente → sus Pedidos)
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private Set<Pedido> pedidos = new HashSet<>();
 
-    // Lado inverso (Cliente → sus Cupones)
+    // lado inverso (Cliente → sus Cupones)
     @OneToMany(mappedBy = "cliente", fetch = FetchType.LAZY)
     private Set<Cupones> cupones = new HashSet<>();
 

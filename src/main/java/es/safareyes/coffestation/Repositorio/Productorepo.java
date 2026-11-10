@@ -17,27 +17,32 @@ import java.util.Optional;
 
 @Repository
 
-// JpaSpecificationExecutor añade findAll(Specification, Pageable), que usa la carta con filtros
+// JpaSpecificationExecutor nos regala el findAll(Specification, Pageable) que usa la carta con filtros
 public interface Productorepo extends JpaRepository<Producto, Long>, JpaSpecificationExecutor<Producto> {
 
     // GET /api/v1/productos (endpoint 1)
-    // Carta paginada con los filtros de ProductoSpecification.
-    // Se sobrescribe solo para traer la categoría en el mismo SELECT (evita una consulta por producto).
+    // carta paginada con los filtros de ProductoSpecification.
+    //
+    // explicación para tontos:
+    // este método ya existe (viene de JpaSpecificationExecutor), lo repetimos solo para ponerle
+    // el @EntityGraph. sin él, al sacar 10 productos Hibernate haría 1 consulta para los productos
+    // y luego 1 más por cada producto para buscar su categoría (el famoso problema N+1).
+    // con @EntityGraph se trae la categoría en el mismo select con un join.
     @Override
     @EntityGraph(attributePaths = {"categoria"})
     Page<Producto> findAll(Specification<Producto> spec, Pageable pageable);
 
     // GET /api/v1/productos
-    // Carta paginada: productos activos cuyo nombre contiene un texto (?page=&size=&sort=)
+    // carta paginada: productos activos cuyo nombre contiene un texto (?page=&size=&sort=)
     Page<Producto> findByNombreContainingIgnoreCaseAndActivoTrue(String texto, Pageable pageable);
 
     // GET /api/v1/productos/{id} (endpoint 2)
-    // Detalle de un producto con sus alérgenos y su categoría cargados en una sola consulta
+    // detalle de un producto con sus alérgenos y su categoría, todo en una sola consulta
     @EntityGraph(attributePaths = {"alergenos", "categoria"})
     Optional<Producto> findWithAlergenosById(Long id);
 
     // GET /api/v1/informes/productos-top?desde=&hasta=&limite=
-    // Productos más vendidos entre dos fechas
+    // productos más vendidos entre dos fechas
     @Query(value = "select pr.nombre, sum(pp.cantidad) from coffestation.producto_pedido pp " +
             "join coffestation.producto pr on pr.id = pp.producto_id " +
             "join coffestation.pedido pe on pe.id = pp.pedido_id " +

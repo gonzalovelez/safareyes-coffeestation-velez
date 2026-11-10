@@ -9,8 +9,8 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.util.List;
 
-// Lo que llega al crear (POST) o modificar (PUT) un producto.
-// El cliente manda ids (categoriaId, alergenosIds), no objetos: el servicio busca las entidades.
+// lo que llega al crear (POST) o modificar (PUT) un producto.
+// el cliente manda ids (categoriaId, alergenosIds), no objetos: el servicio busca las entidades.
 public record ProductoRequest(
 
         @NotBlank(message = "El nombre es obligatorio")
@@ -28,7 +28,7 @@ public record ProductoRequest(
         @NotNull(message = "Hay que indicar la categoría")
         Long categoriaId,
 
-        // Opcional: si no se manda, el producto no tiene alérgenos
+        // opcional: si no se manda, el producto no tiene alérgenos
         List<Long> alergenosIds
 ) {
 }

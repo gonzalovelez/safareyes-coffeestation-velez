@@ -10,7 +10,7 @@ import jakarta.validation.constraints.Size;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 
-// Lo que llega al crear un cupón (POST /cupones, solo ADMIN)
+// lo que llega al crear un cupón (POST /cupones, solo ADMIN)
 public record CuponRequest(
 
         @NotBlank(message = "El código es obligatorio")
@@ -35,11 +35,11 @@ public record CuponRequest(
         @Min(value = 1, message = "El cupón tiene que poder usarse al menos una vez")
         Long maxUsos,
 
-        // Opcional: si no se manda, el cupón vale para cualquier importe
+        // opcional: si no se manda, el cupón vale para cualquier importe
         @DecimalMin(value = "0.00", message = "El importe mínimo no puede ser negativo")
         BigDecimal importeMinimo,
 
-        // Opcional: si se indica, el cupón es personal de ese cliente
+        // opcional: si se indica, el cupón es personal de ese cliente
         Long clienteId
 ) {
 }

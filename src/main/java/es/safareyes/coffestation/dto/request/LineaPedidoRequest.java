@@ -4,7 +4,7 @@ import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.NotNull;
 
-// Una línea dentro de un pedido: qué producto y cuántas unidades (RN-04: de 1 a 20)
+// una línea dentro de un pedido: qué producto y cuántas unidades (RN-04: de 1 a 20)
 public record LineaPedidoRequest(
 
         @NotNull(message = "Hay que indicar el producto")

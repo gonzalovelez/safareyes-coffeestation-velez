@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
-// Lo que devuelve la API de un pedido.
+// lo que devuelve la API de un pedido.
 // cliente va aplanado (su nombre) y total no está en la tabla: se calcula (base + iva).
 public record PedidoResponse(
         Long id,
