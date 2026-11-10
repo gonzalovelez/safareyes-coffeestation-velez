@@ -12,7 +12,6 @@ import org.mapstruct.NullValuePropertyMappingStrategy;
 
 // pasa de Producto (entidad) a DTO y al revés.
 //
-// explicación para tontos:
 // aquí solo escribimos la interfaz. al compilar, MapStruct genera él solo la clase
 // ProductoMapperImpl con todos los getX()/setX() copiando campo a campo
 // (la puedes ver en target/generated-sources/annotations/.../mapper/ProductoMapperImpl.java).

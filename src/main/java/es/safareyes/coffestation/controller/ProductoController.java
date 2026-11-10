@@ -44,7 +44,7 @@ public class ProductoController {
     // carta paginada (10 por página y ordenada por nombre si no se dice otra cosa).
     // todos los filtros son opcionales. devuelve 200 con la página.
     //
-    // explicación para tontos del Pageable:
+    // el Pageable:
     // Spring lee solo los parámetros page (qué página, empieza en 0), size (cuántos por página)
     // y sort (por qué campo ordenar, p. ej. sort=precio,desc) y nos los da metidos en el objeto
     // Pageable. @PageableDefault pone los valores por defecto si no llegan.

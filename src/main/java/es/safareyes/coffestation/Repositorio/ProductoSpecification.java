@@ -13,7 +13,6 @@ import java.util.List;
 
 // filtros de la carta (GET /api/v1/productos, RF-02). es la consulta Q7 (Specification) del enunciado.
 //
-// explicación para tontos:
 // una Specification es un trozo de WHERE metido en un objeto. en vez de escribir una consulta
 // para cada combinación de filtros (categoría + texto, texto + precio, ...), hacemos un trozo
 // por filtro y luego pegamos solo los que el cliente ha mandado. si no manda ninguno,
@@ -57,7 +56,6 @@ public final class ProductoSpecification {
 
     // productos que NO llevan un alérgeno.
     //
-    // explicación para tontos:
     // no vale con "where alergeno <> 7", porque un producto con gluten y lácteos tiene dos filas
     // en alergeno_producto y la del gluten pasaría el filtro. así que lo hacemos en dos pasos:
     //   1. subconsulta: saco los ids de los productos que SÍ llevan ese alérgeno
