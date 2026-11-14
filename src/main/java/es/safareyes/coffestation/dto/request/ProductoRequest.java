@@ -1,3 +1,5 @@
+
+
 package es.safareyes.coffestation.dto.request;
 
 import jakarta.validation.constraints.DecimalMin;
@@ -8,6 +10,7 @@ import jakarta.validation.constraints.Size;
 
 import java.math.BigDecimal;
 import java.util.List;
+
 
 // lo que llega al crear (POST) o modificar (PUT) un producto.
 // el cliente manda ids (categoriaId, alergenosIds), no objetos: el servicio busca las entidades.

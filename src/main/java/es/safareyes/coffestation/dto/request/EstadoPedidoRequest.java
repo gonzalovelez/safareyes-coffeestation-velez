@@ -1,7 +1,9 @@
 package es.safareyes.coffestation.dto.request;
 
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
+
 
 // cuerpo de PATCH /pedidos/{id}/estado
 // ejemplo: { "estado": "EN_PREPARACION" }
@@ -13,3 +15,5 @@ public record EstadoPedidoRequest(
         String estado
 ) {
 }
+
+

@@ -4,5 +4,7 @@ package es.safareyes.coffestation.dto.response;
 public record ProductoTopDto(
         String producto,
         Long unidadesVendidas
+
 ) {
+
 }

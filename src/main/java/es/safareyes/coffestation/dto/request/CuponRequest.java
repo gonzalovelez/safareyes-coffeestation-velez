@@ -31,9 +31,11 @@ public record CuponRequest(
         @NotNull(message = "La fecha de fin es obligatoria")
         LocalDateTime fechaFin,
 
+
         @NotNull(message = "El número máximo de usos es obligatorio")
         @Min(value = 1, message = "El cupón tiene que poder usarse al menos una vez")
         Long maxUsos,
+
 
         // opcional: si no se manda, el cupón vale para cualquier importe
         @DecimalMin(value = "0.00", message = "El importe mínimo no puede ser negativo")

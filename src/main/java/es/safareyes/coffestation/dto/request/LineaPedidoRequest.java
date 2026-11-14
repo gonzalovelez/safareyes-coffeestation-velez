@@ -13,6 +13,12 @@ public record LineaPedidoRequest(
         @NotNull(message = "Hay que indicar la cantidad")
         @Min(value = 1, message = "La cantidad mínima es 1")
         @Max(value = 20, message = "La cantidad máxima es 20")
+
         Integer cantidad
+
+
 ) {
 }
+
+
+
