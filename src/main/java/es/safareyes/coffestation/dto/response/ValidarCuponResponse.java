@@ -1,5 +1,4 @@
 package es.safareyes.coffestation.dto.response;
-
 import java.math.BigDecimal;
 
 // respuesta de POST /cupones/validar

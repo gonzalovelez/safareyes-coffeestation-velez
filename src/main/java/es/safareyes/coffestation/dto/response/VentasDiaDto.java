@@ -4,6 +4,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 
 // informe GET /informes/ventas-dia?fecha=
+
 public record VentasDiaDto(
         LocalDate fecha,
         Long numeroPedidos,
@@ -12,3 +13,8 @@ public record VentasDiaDto(
         BigDecimal iva
 ) {
 }
+
+
+
+
+

@@ -16,15 +16,17 @@ import java.util.LinkedHashMap;
 import java.util.Map;
 
 // aquí se convierten todas las excepciones en respuestas http con su código de error.
-//
+
 // cuando algo peta en un controlador o en un servicio, la excepción "sube" hasta Spring.
-// @RestControllerAdvice hace que Spring mire en esta clase si hay un método @ExceptionHandler
-// para ese tipo de excepción, y lo que devuelva ese método es lo que le llega al cliente.
+// @RestControllerAdvice hace que Spring mire en esta clase si hay un méto do @ExceptionHandler
+// para ese tipo de excepción, y lo que devuelva ese méto do es lo que le llega al cliente.
 // así los servicios solo tienen que hacer "throw new RecursoNoEncontradoException(...)"
 // y no se preocupan de códigos http.
-//
+
+
 // todos los errores salen con el formato ProblemDetail (estándar RFC 9457):
 // { "type", "title", "status", "detail", "instance", ...y lo que queramos añadir }
+
 @Slf4j
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -57,17 +59,21 @@ public class GlobalExceptionHandler {
                 .forEach(error -> errores.putIfAbsent(error.getField(), error.getDefaultMessage()));
         log.warn("400 - Datos no válidos: {}", errores);
 
+
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
                 "La petición tiene datos no válidos");
         problema.setTitle("Datos no válidos");
         problema.setProperty("errores", errores);
         return problema;
+
+
     }
 
     // 400: el cuerpo no es un json válido o un campo viene con un tipo raro ("precio": "abc")
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ProblemDetail manejarJsonIlegible(HttpMessageNotReadableException ex) {
         log.warn("400 - JSON ilegible: {}", ex.getMessage());
+
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.BAD_REQUEST,
                 "El cuerpo de la petición no es un JSON válido o algún campo tiene un tipo incorrecto");
         problema.setTitle("Petición mal formada");
@@ -97,6 +103,7 @@ public class GlobalExceptionHandler {
     // 500: cualquier otro error que no hayamos previsto.
     // en el log se guarda entero, pero al cliente no le enseñamos la traza
     // (le daríamos pistas de cómo está hecho el programa por dentro).
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<ProblemDetail> manejarErrorInesperado(Exception ex) {
         // ojo: este método lo pilla todo, también los errores normales de Spring
@@ -105,10 +112,15 @@ public class GlobalExceptionHandler {
         if (ex instanceof ErrorResponse errorSpring) {
             return ResponseEntity.status(errorSpring.getStatusCode()).body(errorSpring.getBody());
         }
+
         log.error("500 - Error inesperado", ex);
         ProblemDetail problema = ProblemDetail.forStatusAndDetail(HttpStatus.INTERNAL_SERVER_ERROR,
                 "Se ha producido un error interno");
         problema.setTitle("Error interno");
         return ResponseEntity.internalServerError().body(problema);
+
     }
 }
+
+
+

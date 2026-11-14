@@ -8,3 +8,4 @@ public record CategoriaResponse(
         Long productosActivos
 ) {
 }
+

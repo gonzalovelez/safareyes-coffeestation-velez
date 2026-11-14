@@ -38,16 +38,17 @@ public class ProductoServiceImpl implements ProductoService {
     private final Alergenorepo alergenorepo;
     private final ProductoMapper productoMapper;
 
-    // ---------------------------------------------------------------------------------------
+
     // endpoint 1 - GET /api/v1/productos
+
+    //vaya chorizo de url todo: mirar como hacerla mas pequeña
     // url: http://localhost:8080/api/v1/productos?categoriaId=1&texto=café&precioMax=4&disponible=true&sinAlergenoId=7&page=0&size=10
-    //
+
     // @Transactional(readOnly = true):
     // aquí no se guarda nada, pero los alérgenos son LAZY (no se cargan hasta que alguien los pide).
     // el mapper los pide al convertir a DTO, y para eso la conexión con la bd tiene que seguir abierta.
-    // la transacción la mantiene abierta hasta que acaba el método. sin ella saltaría la típica
+    // la transacción la mantiene abierta hasta que acaba el méto do. sin ella saltaría la típica
     // LazyInitializationException. readOnly = true le dice a Hibernate que no va a haber cambios.
-    // ---------------------------------------------------------------------------------------
     @Override
     @Transactional(readOnly = true)
     public Page<ProductoResponse> listarCarta(Long categoriaId, String texto, BigDecimal precioMax,
@@ -63,10 +64,9 @@ public class ProductoServiceImpl implements ProductoService {
         return productorepo.findAll(filtros, pageable).map(productoMapper::toResponse);
     }
 
-    // ---------------------------------------------------------------------------------------
+
     // endpoint 2 - GET /api/v1/productos/{id}
     // url: http://localhost:8080/api/v1/productos/9
-    // ---------------------------------------------------------------------------------------
     @Override
     @Transactional(readOnly = true)
     public ProductoResponse obtenerPorId(Long id) {
@@ -81,10 +81,9 @@ public class ProductoServiceImpl implements ProductoService {
         return productoMapper.toResponse(producto);
     }
 
-    // ---------------------------------------------------------------------------------------
+
     // endpoint 3 - POST /api/v1/productos
     // url: http://localhost:8080/api/v1/productos
-    // ---------------------------------------------------------------------------------------
     @Override
     @Transactional
     public ProductoResponse crear(ProductoRequest request) {
@@ -103,14 +102,13 @@ public class ProductoServiceImpl implements ProductoService {
         return productoMapper.toResponse(guardado);
     }
 
-    // ---------------------------------------------------------------------------------------
+
     // endpoint 4 - PUT /api/v1/productos/{id}
     // url: http://localhost:8080/api/v1/productos/21
     //
     // por qué no hay save():
     // el producto lo hemos sacado de la bd dentro de la transacción, así que Hibernate lo está
-    // "vigilando". al acabar el método compara cómo estaba con cómo está y lanza él solo el update.
-    // ---------------------------------------------------------------------------------------
+    // "vigilando". al acabar el méto do compara cómo estaba con cómo está y lanza él solo el update.
     @Override
     @Transactional
     public ProductoResponse actualizar(Long id, ProductoRequest request) {
@@ -128,11 +126,12 @@ public class ProductoServiceImpl implements ProductoService {
         return productoMapper.toResponse(producto);
     }
 
-    // ---------------------------------------------------------------------------------------
+
     // endpoint 5 - PATCH /api/v1/productos/{id}/disponibilidad
     // url: http://localhost:8080/api/v1/productos/21/disponibilidad
     // (tampoco hace falta save(), por lo mismo que en el endpoint 4)
-    // ---------------------------------------------------------------------------------------
+
+
     @Override
     @Transactional
     public ProductoResponse cambiarDisponibilidad(Long id, DisponibilidadRequest request) {
@@ -143,9 +142,8 @@ public class ProductoServiceImpl implements ProductoService {
         return productoMapper.toResponse(producto);
     }
 
-    // =======================================================================================
-    // métodos de ayuda
-    // =======================================================================================
+
+    // métodos de ayuda en verda no hacen falta pero queria tenerlos
 
     // busca un producto para cambiarlo: 404 si no existe, 422 si está de baja (RN-01)
     private Producto buscarProductoActivo(Long id) {

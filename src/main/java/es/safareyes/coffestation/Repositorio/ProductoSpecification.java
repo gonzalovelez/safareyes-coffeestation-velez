@@ -12,46 +12,55 @@ import java.util.ArrayList;
 import java.util.List;
 
 // filtros de la carta (GET /api/v1/productos, RF-02). es la consulta Q7 (Specification) del enunciado.
-//
+
 // una Specification es un trozo de WHERE metido en un objeto. en vez de escribir una consulta
 // para cada combinación de filtros (categoría + texto, texto + precio, ...), hacemos un trozo
 // por filtro y luego pegamos solo los que el cliente ha mandado. si no manda ninguno,
 // sale la carta entera.
-//
+
 // en cada lambda (root, query, cb):
 //   root  -> el producto que estamos mirando (root.get("precio") = su precio)
 //   query -> la consulta entera (la usamos para meter una subconsulta)
 //   cb    -> el "constructor" de condiciones: equal (=), like, lessThanOrEqualTo (<=), not...
+
 public final class ProductoSpecification {
+
 
     private ProductoSpecification() {
         // solo tiene métodos static, no hace falta crear objetos de esta clase
     }
 
     // RN-01: los productos dados de baja no salen nunca en la carta
-    public static Specification<Producto> activo() {
-        return (root, query, cb) -> cb.isTrue(root.get("activo"));
-    }
 
+    public static Specification<Producto> activo() {
+        return (root, query, cb)
+                -> cb.isTrue(root.get("activo"));
+    }
     // where categoria_id = :categoriaId
     public static Specification<Producto> deCategoria(Long categoriaId) {
-        return (root, query, cb) -> cb.equal(root.get("categoria").get("id"), categoriaId);
+        return (root, query, cb)
+                -> cb.equal(root.get("categoria").get("id"), categoriaId);
     }
 
     // where lower(nombre) like '%texto%'
-    // se pasa todo a minúsculas para que "CAFÉ" y "café" encuentren lo mismo
+    // se pasa to do a minúsculas para que "CAFÉ" y "café" encuentren lo mismo
     public static Specification<Producto> nombreContiene(String texto) {
-        return (root, query, cb) -> cb.like(cb.lower(root.get("nombre")), "%" + texto.toLowerCase() + "%");
+        return (root, query, cb)
+                -> cb.like(cb.lower(root.get("nombre")),
+                "%" + texto.toLowerCase() + "%");
     }
 
     // where precio <= :precioMax
     public static Specification<Producto> precioMaximo(BigDecimal precioMax) {
-        return (root, query, cb) -> cb.lessThanOrEqualTo(root.get("precio"), precioMax);
+        return (root, query, cb)
+                -> cb.lessThanOrEqualTo(root.get("precio"), precioMax);
     }
+
 
     // where disponible = :disponible  (true = hay, false = agotado)
     public static Specification<Producto> disponible(Boolean disponible) {
-        return (root, query, cb) -> cb.equal(root.get("disponible"), disponible);
+        return (root, query, cb)
+                -> cb.equal(root.get("disponible"), disponible);
     }
 
     // productos que NO llevan un alérgeno.
@@ -71,6 +80,9 @@ public final class ProductoSpecification {
             return cb.not(root.get("id").in(conAlergeno));
         };
     }
+
+
+
 
     // junta los filtros que han llegado (los que vienen a null se saltan).
     // activo() va siempre porque la carta nunca enseña productos de baja (RN-01).
@@ -94,6 +106,11 @@ public final class ProductoSpecification {
         if (sinAlergenoId != null) {
             filtros.add(sinAlergeno(sinAlergenoId));
         }
+
         return Specification.allOf(filtros);
+
+
     }
+
 }
+

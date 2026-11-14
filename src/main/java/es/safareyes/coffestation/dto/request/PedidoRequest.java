@@ -18,6 +18,7 @@ public record PedidoRequest(
         @Size(max = 15, message = "Un pedido no puede tener más de 15 líneas")
         List<@Valid LineaPedidoRequest> lineas,
 
+
         @Size(max = 20, message = "El código de cupón no puede pasar de 20 caracteres")
         String codigoCupon,
 
@@ -25,3 +26,6 @@ public record PedidoRequest(
         String dniSocio
 ) {
 }
+
+
+
