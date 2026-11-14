@@ -14,56 +14,56 @@
               "name": "[PRINCIPAL] Carta",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?page=0&size=10"
+                "url": "http://localhost:8080/api/v1/productos?page=0&size=10"
               }
             },
             {
               "name": "[REQUISITOS-02] Por categoría",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?categoriaId=1"
+                "url": "http://localhost:8080/api/v1/productos?categoriaId=1"
               }
             },
             {
               "name": "[REQUISITOS-02] Por texto",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?texto=café"
+                "url": "http://localhost:8080/api/v1/productos?texto=café"
               }
             },
             {
               "name": "[REQUISITOS-02] Precio máximo",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?precioMax=1.50"
+                "url": "http://localhost:8080/api/v1/productos?precioMax=1.50"
               }
             },
             {
               "name": "[REQUISITOS-02] Solo agotados",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?disponible=false"
+                "url": "http://localhost:8080/api/v1/productos?disponible=false"
               }
             },
             {
               "name": "[REQUISITOS-02] Sin alérgeno (lácteos)",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?sinAlergenoId=7"
+                "url": "http://localhost:8080/api/v1/productos?sinAlergenoId=7"
               }
             },
             {
               "name": "[REQUISITOS-02] Filtros combinados",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?categoriaId=4&sinAlergenoId=3&precioMax=4&disponible=true"
+                "url": "http://localhost:8080/api/v1/productos?categoriaId=4&sinAlergenoId=3&precioMax=4&disponible=true"
               }
             },
             {
               "name": "[RN-01] Producto de baja no sale",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos?texto=ensaimada"
+                "url": "http://localhost:8080/api/v1/productos?texto=ensaimada"
               }
             }
           ]
@@ -75,21 +75,21 @@
               "name": "[PRINCIPAL] Detalle con alérgenos",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos/9"
+                "url": "http://localhost:8080/api/v1/productos/9"
               }
             },
             {
               "name": "[ERROR 404] No existe",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos/9999"
+                "url": "http://localhost:8080/api/v1/productos/9999"
               }
             },
             {
               "name": "[RN-01] Producto de baja da 404",
               "request": {
                 "method": "GET",
-                "url": "{{baseUrl}}/productos/12"
+                "url": "http://localhost:8080/api/v1/productos/12"
               }
             }
           ]
@@ -101,7 +101,7 @@
               "name": "[PRINCIPAL] Crear producto (201 + Location)",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/productos",
+                "url": "http://localhost:8080/api/v1/productos",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -118,7 +118,7 @@
               "name": "[ERROR 400] Sin nombre ni precio",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/productos",
+                "url": "http://localhost:8080/api/v1/productos",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -135,7 +135,7 @@
               "name": "[ERROR 404] Categoría no existe",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/productos",
+                "url": "http://localhost:8080/api/v1/productos",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -152,7 +152,7 @@
               "name": "[ERROR 404] Alérgeno no existe",
               "request": {
                 "method": "POST",
-                "url": "{{baseUrl}}/productos",
+                "url": "http://localhost:8080/api/v1/productos",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -174,7 +174,7 @@
               "name": "[PRINCIPAL] Modificar producto",
               "request": {
                 "method": "PUT",
-                "url": "{{baseUrl}}/productos/21",
+                "url": "http://localhost:8080/api/v1/productos/21",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -191,7 +191,7 @@
               "name": "[ERROR 404] No existe",
               "request": {
                 "method": "PUT",
-                "url": "{{baseUrl}}/productos/9999",
+                "url": "http://localhost:8080/api/v1/productos/9999",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -208,7 +208,7 @@
               "name": "[EXTRA] Producto de baja da 422",
               "request": {
                 "method": "PUT",
-                "url": "{{baseUrl}}/productos/12",
+                "url": "http://localhost:8080/api/v1/productos/12",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -230,7 +230,7 @@
               "name": "[PRINCIPAL] Marcar agotado",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/productos/21/disponibilidad",
+                "url": "http://localhost:8080/api/v1/productos/21/disponibilidad",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -247,7 +247,7 @@
               "name": "[PRINCIPAL] Reponer",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/productos/21/disponibilidad",
+                "url": "http://localhost:8080/api/v1/productos/21/disponibilidad",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -264,7 +264,7 @@
               "name": "[ERROR 404] No existe",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/productos/9999/disponibilidad",
+                "url": "http://localhost:8080/api/v1/productos/9999/disponibilidad",
                 "header": [
                   {
                     "key": "Content-Type",
@@ -281,7 +281,7 @@
               "name": "[EXTRA] Producto de baja da 422",
               "request": {
                 "method": "PATCH",
-                "url": "{{baseUrl}}/productos/12/disponibilidad",
+                "url": "http://localhost:8080/api/v1/productos/12/disponibilidad",
                 "header": [
                   {
                     "key": "Content-Type",
