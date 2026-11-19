@@ -11,6 +11,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 
+import es.safareyes.coffestation.dto.response.CategoriaResponse;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -72,15 +73,11 @@ public class Coffestationconsultas {
     @Test
     void buscarCategoriasConProductos() {
 
-        // cada Object[] es una categoría: [0] = nombre, [1] = nº de productos activos
-        List<Object[]> categorias = categoriarepo.obtenerCategoriasConProductos();
+        // ahora la consulta ya devuelve el dto directamente
+        List<CategoriaResponse> categorias = categoriarepo.obtenerCategoriasConProductos();
 
-
-        for (Object[] fila : categorias) {
-            String nombreCategoria = (String) fila[0];
-            Long productosActivos = (Long) fila[1];
-
-            System.out.println("Categoría: " + nombreCategoria + " - Productos activos: " + productosActivos);
+        for (CategoriaResponse categoria : categorias) {
+            System.out.println("Categoría: " + categoria.nombre() + " - Productos activos: " + categoria.productosActivos());
         }
     }
 
