@@ -297,6 +297,80 @@
           ]
         }
       ]
+    },
+    {
+      "name": "Categorías",
+      "item": [
+        {
+          "name": "7. GET /categorias",
+          "item": [
+            {
+              "name": "[PRINCIPAL] Categorías con nº de productos activos",
+              "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/categorias"
+              }
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "name": "Pedidos",
+      "item": [
+        {
+          "name": "10. GET /pedidos/{id}",
+          "item": [
+            {
+              "name": "[PRINCIPAL] Detalle con líneas",
+              "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/pedidos/10"
+              }
+            },
+            {
+              "name": "[ERROR 404] No existe",
+              "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/pedidos/9999"
+              }
+            },
+            {
+              "name": "[ERROR 400] Id no numérico",
+              "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/pedidos/abc"
+              }
+            }
+          ]
+        },
+        {
+          "name": "11. GET /pedidos",
+          "item": [
+            {
+              "name": "[PRINCIPAL] Listado paginado",
+              "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/pedidos?page=0&size=10"
+              }
+            },
+            {
+              "name": "[REQUISITOS-02] Por fecha",
+              "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/pedidos?fecha=2026-10-03"
+              }
+            },
+            {
+              "name": "[ERROR 400] Fecha mal escrita",
+              "request": {
+                "method": "GET",
+                "url": "http://localhost:8080/api/v1/pedidos?fecha=ayer"
+              }
+            }
+          ]
+        }
+      ]
     }
   ]
 }
