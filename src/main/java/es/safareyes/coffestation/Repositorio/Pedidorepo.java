@@ -17,15 +17,24 @@ import java.util.Optional;
 
 public interface Pedidorepo extends JpaRepository<Pedido, Long> {
 
-    // GET /api/v1/pedidos/{id}
-    // detalle de un pedido con sus líneas y sus productos en una sola consulta
-    @EntityGraph(attributePaths = {"lineas", "lineas.producto"})
+    // GET /api/v1/pedidos/{id} (endpoint 10)
+    // detalle de un pedido con su cliente, sus líneas y sus productos en una sola consulta
+    @EntityGraph(attributePaths = {"cliente", "lineas", "lineas.producto"})
     @Query("select p from Pedido p where p.id = :id")
     Optional<Pedido> obtenerPedidoConLineas(@Param("id") Long id);
 
-    // GET /api/v1/pedidos
-    // listado paginado de pedidos entre dos fechas (?page=&size=&sort=)
+    // GET /api/v1/pedidos?fecha= (endpoint 11)
+    // listado paginado de pedidos entre dos fechas (?page=&size=&sort=).
+    // aquí el @EntityGraph solo trae el cliente: si metiéramos también las líneas (una colección)
+    // hibernate no podría paginar en la bd y se traería todos los pedidos a memoria
+    @EntityGraph(attributePaths = {"cliente"})
     Page<Pedido> findByFechaHoraBetween(LocalDateTime desde, LocalDateTime hasta, Pageable pageable);
+
+    // GET /api/v1/pedidos sin fecha (endpoint 11)
+    // todos los pedidos paginados. lo repetimos solo para ponerle el @EntityGraph del cliente
+    @Override
+    @EntityGraph(attributePaths = {"cliente"})
+    Page<Pedido> findAll(Pageable pageable);
 
     // GET /api/v1/informes/ventas-dia?fecha=
     // ventas entre dos momentos (devuelve una sola fila)
